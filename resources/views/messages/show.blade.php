@@ -15,7 +15,7 @@
         </tr>
         <tr>
             <th>ステータス</th>
-            <td>{{ $message->title }}</td>
+            <td>{{ $message->status }}</td>
         </tr>
     </table>
 {!! link_to_route('messages.edit', 'このタスクを編集', ['message' => $message->id], ['class' => 'btn btn-light']) !!}

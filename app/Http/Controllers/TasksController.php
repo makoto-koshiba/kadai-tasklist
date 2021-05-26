@@ -125,15 +125,13 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        
+        $task = Task::findOrFail($id);
         // idの値でメッセージを検索して取得
         $task = Task::findOrFail($id);
-        // 認証済みユーザ（閲覧者）がその投稿の所有者である場合は、投稿を削除
-        if (\Auth::id() === $task->user_id) {
-            $task->delete();
+        // メッセージを削除
+        $task->delete();
 
         // トップページへリダイレクトさせる
         return redirect('/');
     }
-}
 }

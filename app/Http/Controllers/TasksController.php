@@ -25,10 +25,8 @@ class TasksController extends Controller
                 'tasks' => $tasks,
             ];
         }
-        else{
          // Welcomeビューでそれらを表示
         return view('welcome', $data);
-        }
    }
     
 
@@ -79,14 +77,15 @@ class TasksController extends Controller
     {
          $task = task::findOrFail($id);
          if (\Auth::id() === $task->user_id) {
-        return view('tasks.show', [
+          return view('tasks.show', [
             'task' => $task,
         ]);
-         }
-         else{
-              return redirect('/');
-         }
-    }
+    }  
+        else{
+            return redirect('/');
+        }
+        }
+        
 
     /**
      * Show the form for editing the specified resource.

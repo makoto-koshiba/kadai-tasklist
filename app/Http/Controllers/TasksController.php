@@ -25,8 +25,10 @@ class TasksController extends Controller
                 'tasks' => $tasks,
             ];
         }
+        else{
          // Welcomeビューでそれらを表示
         return view('welcome', $data);
+        }
    }
     
 
@@ -54,8 +56,8 @@ class TasksController extends Controller
          $request->validate([
             'content' => 'required|max:255',
             'status' => 'required|max:10',
-            
             ]);
+            
         // メッセージを作成
         $task = new Task;
         $task->status = $request->status;    // 追加
@@ -76,9 +78,14 @@ class TasksController extends Controller
     public function show($id)
     {
          $task = task::findOrFail($id);
+         if (\Auth::id() === $task->user_id) {
         return view('tasks.show', [
             'task' => $task,
         ]);
+         }
+         else{
+              return redirect('/');
+         }
     }
 
     /**
@@ -110,6 +117,7 @@ class TasksController extends Controller
             ]);
             
         $task = Task::findOrFail($id);
+        
          $task->status = $request->status;
         $task->content = $request->content;
         $task->user_id = $request->user()->id;
@@ -125,11 +133,13 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        $task = Task::findOrFail($id);
+        
         // idの値でメッセージを検索して取得
         $task = Task::findOrFail($id);
-        // メッセージを削除
-        $task->delete();
+         // 認証済みユーザ（閲覧者）がその投稿の所有者である場合は、投稿を削除
+        if (\Auth::id() === $task->user_id) {
+            $task->delete();
+        }
 
         // トップページへリダイレクトさせる
         return redirect('/');
